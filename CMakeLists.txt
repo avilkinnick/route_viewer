@@ -13,6 +13,7 @@ add_executable(route_viewer
     src/logging.cpp
     src/main.cpp
     src/SdlInstance.cpp
+    src/VulkanInstance.cpp
     src/Window.cpp
 )
 
