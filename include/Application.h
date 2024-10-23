@@ -16,8 +16,8 @@ public:
     void run();
 
 private:
-    std::unique_ptr<SdlInstance> sdl_instance;
-    std::unique_ptr<Window> window;
+    std::unique_ptr<const SdlInstance> sdl_instance;
+    std::unique_ptr<const Window> window;
 };
 
 #endif // APPLICATION_H

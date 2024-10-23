@@ -15,8 +15,8 @@ Application::~Application() = default;
 
 void Application::initialize()
 {
-    sdl_instance = std::make_unique<SdlInstance>(SDL_INIT_VIDEO);
-    window = std::make_unique<Window>("Route Viewer", 800, 600, SDL_WINDOW_VULKAN);
+    sdl_instance = std::make_unique<const SdlInstance>(SDL_INIT_VIDEO);
+    window = std::make_unique<const Window>("Route Viewer", 800, 600, SDL_WINDOW_VULKAN);
 }
 
 void Application::run()

@@ -2,14 +2,15 @@
 
 #include <cstdint>
 
-#include <map>
 #include <optional>
-#include <set>
-#include <string>
 #include <string_view>
 #include <vector>
 
 #include <vulkan/vulkan_core.h>
+
+#include "aliases/ExtensionMap.h"
+#include "aliases/LayerNameSet.h"
+#include "aliases/LayerNameView.h"
 
 VulkanInstance::VulkanInstance(const char* application_name, std::uint32_t application_version)
 {
@@ -39,7 +40,7 @@ VulkanInstance::VulkanInstance(const char* application_name, std::uint32_t appli
     // create_info.ppEnabledExtensionNames;
 }
 
-VulkanInstance::LayerNameSet VulkanInstance::get_available_layer_names() const
+LayerNameSet VulkanInstance::get_available_layer_names() const
 {
     std::uint32_t available_layer_count;
     vkEnumerateInstanceLayerProperties(&available_layer_count, nullptr);
@@ -56,7 +57,7 @@ VulkanInstance::LayerNameSet VulkanInstance::get_available_layer_names() const
     return available_layer_names;
 }
 
-VulkanInstance::ExtensionMap VulkanInstance::get_available_extensions(const LayerNameSet& available_layer_names) const
+ExtensionMap VulkanInstance::get_available_extensions(const LayerNameSet& available_layer_names) const
 {
     ExtensionMap available_extensions;
     get_available_extensions_from_layer(available_extensions);
