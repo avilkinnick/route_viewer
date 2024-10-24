@@ -6,6 +6,7 @@
 #include <vulkan/vulkan_core.h>
 
 class SdlInstance;
+class VulkanDebugMessenger;
 class VulkanInstance;
 class Window;
 
@@ -24,7 +25,8 @@ private:
 private:
     std::unique_ptr<const SdlInstance> sdl_instance;
     std::unique_ptr<const Window> window;
-    std::unique_ptr<const VulkanInstance> vulkan_instance;
+    std::unique_ptr<VulkanInstance> vulkan_instance;
+    std::unique_ptr<const VulkanDebugMessenger> vulkan_debug_messenger;
 };
 
 #endif // APPLICATION_H

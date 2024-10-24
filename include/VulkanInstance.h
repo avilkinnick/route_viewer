@@ -28,6 +28,8 @@ public:
 
     ~VulkanInstance();
 
+    operator VkInstance() { return instance; }
+
 private:
     LayerNameSet get_available_layer_names() const;
     ExtensionMap get_available_extensions(const LayerNameSet& available_layer_names) const;

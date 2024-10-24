@@ -12,6 +12,7 @@
 
 #include "logging.h"
 #include "SdlInstance.h"
+#include "VulkanDebugMessenger.h"
 #include "VulkanInstance.h"
 #include "Window.h"
 
@@ -25,10 +26,15 @@ void Application::initialize()
 
     const auto debug_messenger_create_info = create_debug_messenger_create_info();
 
-    vulkan_instance = std::make_unique<const VulkanInstance>(
+    vulkan_instance = std::make_unique<VulkanInstance>(
         "Route Viewer",
         1,
         window->get_required_vulkan_instance_extension_names(),
+        &debug_messenger_create_info
+    );
+
+    vulkan_debug_messenger = std::make_unique<const VulkanDebugMessenger>(
+        *vulkan_instance,
         &debug_messenger_create_info
     );
 }
