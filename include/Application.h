@@ -4,6 +4,7 @@
 #include <memory>
 
 class SdlInstance;
+class VulkanInstance;
 class Window;
 
 class Application
@@ -18,6 +19,7 @@ public:
 private:
     std::unique_ptr<const SdlInstance> sdl_instance;
     std::unique_ptr<const Window> window;
+    std::unique_ptr<const VulkanInstance> vulkan_instance;
 };
 
 #endif // APPLICATION_H

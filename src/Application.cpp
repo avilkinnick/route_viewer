@@ -8,6 +8,7 @@
 #include <SDL2/SDL_video.h>
 
 #include "SdlInstance.h"
+#include "VulkanInstance.h"
 #include "Window.h"
 
 Application::Application() = default;
@@ -17,6 +18,12 @@ void Application::initialize()
 {
     sdl_instance = std::make_unique<const SdlInstance>(SDL_INIT_VIDEO);
     window = std::make_unique<const Window>("Route Viewer", 800, 600, SDL_WINDOW_VULKAN);
+
+    vulkan_instance = std::make_unique<const VulkanInstance>(
+        "Route Viewer",
+        1,
+        window->get_required_vulkan_instance_extension_names()
+    );
 }
 
 void Application::run()
