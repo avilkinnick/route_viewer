@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include <vulkan/vulkan_core.h>
+
 class SdlInstance;
 class VulkanInstance;
 class Window;
@@ -15,6 +17,9 @@ public:
 
     void initialize();
     void run();
+
+private:
+    VkDebugUtilsMessengerCreateInfoEXT create_debug_messenger_create_info() const;
 
 private:
     std::unique_ptr<const SdlInstance> sdl_instance;

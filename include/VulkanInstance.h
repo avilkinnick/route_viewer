@@ -22,8 +22,11 @@ public:
     VulkanInstance(
         const char* application_name,
         std::uint32_t application_version,
-        const CExtensionNameVector&& window_required_extension_names
+        const CExtensionNameVector&& window_required_extension_names,
+        const VkDebugUtilsMessengerCreateInfoEXT* debug_messenger_create_info
     );
+
+    ~VulkanInstance();
 
 private:
     LayerNameSet get_available_layer_names() const;

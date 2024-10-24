@@ -24,7 +24,8 @@
 VulkanInstance::VulkanInstance(
     const char* application_name,
     std::uint32_t application_version,
-    const CExtensionNameVector&& window_required_extension_names
+    const CExtensionNameVector&& window_required_extension_names,
+    const VkDebugUtilsMessengerCreateInfoEXT* debug_messenger_create_info
 )
 {
     std::uint32_t api_version;
@@ -108,15 +109,40 @@ VulkanInstance::VulkanInstance(
         = enabled_extension_name_set.find(VK_EXT_VALIDATION_FEATURES_EXTENSION_NAME)
             != enabled_extension_name_set.end();
 
+    const std::array<VkValidationFeatureEnableEXT, 4> enabled_validation_features = {
+        VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_EXT,
+        VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_RESERVE_BINDING_SLOT_EXT,
+        VK_VALIDATION_FEATURE_ENABLE_BEST_PRACTICES_EXT,
+        VK_VALIDATION_FEATURE_ENABLE_SYNCHRONIZATION_VALIDATION_EXT
+    };
+
+    VkValidationFeaturesEXT validation_features;
+    validation_features.sType = VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT;
+    validation_features.pNext = enabled_debug_utils_extension ? debug_messenger_create_info : nullptr;
+    validation_features.enabledValidationFeatureCount = enabled_validation_features.size();
+    validation_features.pEnabledValidationFeatures = enabled_validation_features.data();
+    validation_features.disabledValidationFeatureCount = 0;
+    validation_features.pDisabledValidationFeatures = nullptr;
+
     VkInstanceCreateInfo create_info;
     create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    // create_info.pNext;
-    // create_info.flags;
+    create_info.pNext = enabled_validation_features_extension ? &validation_features : validation_features.pNext;
+    create_info.flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR * enabled_portability_enumeration_extension;
     create_info.pApplicationInfo = &application_info;
     create_info.enabledLayerCount = enabled_layer_name_vector.size();
     create_info.ppEnabledLayerNames = enabled_layer_name_vector.data();
     create_info.enabledExtensionCount = enabled_extension_name_vector.size();
     create_info.ppEnabledExtensionNames = enabled_extension_name_vector.data();
+
+    if (vkCreateInstance(&create_info, nullptr, &instance) != VK_SUCCESS)
+    {
+        throw std::runtime_error("Failed to create Vulkan instance");
+    }
+}
+
+VulkanInstance::~VulkanInstance()
+{
+    vkDestroyInstance(instance, nullptr);
 }
 
 LayerNameSet VulkanInstance::get_available_layer_names() const
