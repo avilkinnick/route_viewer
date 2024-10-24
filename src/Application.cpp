@@ -29,7 +29,7 @@ void Application::initialize()
     vulkan_instance = std::make_unique<VulkanInstance>(
         "Route Viewer",
         1,
-        window->get_required_vulkan_instance_extension_names(),
+        window->get_required_vulkan_extensions(),
         &debug_messenger_create_info
     );
 

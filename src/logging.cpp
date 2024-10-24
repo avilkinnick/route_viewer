@@ -5,7 +5,7 @@
 
 #include <SDL2/SDL_error.h>
 
-#define DEFINE_LOG_IMPLEMENTATION(category, color_code) \
+#define LOG_IMPLEMENTATION(category, color_code) \
     void log_##category(const char* format, ...) \
     { \
         std::va_list args; \
@@ -16,8 +16,8 @@
         va_end(args); \
     }
 
-DEFINE_LOG_IMPLEMENTATION(warning, "\x1b[1;33m")
-DEFINE_LOG_IMPLEMENTATION(error, "\x1b[1;31m")
+LOG_IMPLEMENTATION(warning, "\x1b[1;33m")
+LOG_IMPLEMENTATION(error, "\x1b[1;31m")
 
 void log_sdl_error()
 {

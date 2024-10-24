@@ -40,8 +40,8 @@ VulkanInstance::VulkanInstance(
     application_info.engineVersion = 0;
     application_info.apiVersion = api_version;
 
-    const auto available_layer_names = get_available_layer_names();
-    const auto available_extensions = get_available_extensions(available_layer_names);
+    const auto available_layers = get_available_layer_names();
+    const auto available_extensions = get_available_extensions(available_layers);
 
     LayerNameViewSet enabled_layer_name_set;
     ExtensionNameViewSet enabled_extension_name_set;
@@ -72,7 +72,7 @@ VulkanInstance::VulkanInstance(
     const CExtensionNameVector optional_extension_names = {VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME};
 #endif
 
-    enable_optional_layers(enabled_layer_name_set, available_layer_names, optional_layer_names);
+    enable_optional_layers(enabled_layer_name_set, available_layers, optional_layer_names);
     enable_extensions(
         enabled_layer_name_set,
         enabled_extension_name_set,

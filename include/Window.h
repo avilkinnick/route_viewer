@@ -14,7 +14,7 @@ public:
     Window(const char* title, int width, int height, Uint32 flags);
     ~Window();
 
-    CExtensionNameVector get_required_vulkan_instance_extension_names() const;
+    CExtensionNameVector get_required_vulkan_extensions() const;
 
 private:
     SDL_Window* window;

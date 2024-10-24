@@ -30,13 +30,13 @@ Window::~Window()
     SDL_DestroyWindow(window);
 }
 
-CExtensionNameVector Window::get_required_vulkan_instance_extension_names() const
+CExtensionNameVector Window::get_required_vulkan_extensions() const
 {
-    unsigned int required_extension_count;
-    SDL_Vulkan_GetInstanceExtensions(window, &required_extension_count, nullptr);
+    unsigned int extension_count;
+    SDL_Vulkan_GetInstanceExtensions(window, &extension_count, nullptr);
 
-    CExtensionNameVector required_extension_names(required_extension_count);
-    SDL_Vulkan_GetInstanceExtensions(window, &required_extension_count, required_extension_names.data());
+    CExtensionNameVector extensions(extension_count);
+    SDL_Vulkan_GetInstanceExtensions(window, &extension_count, extensions.data());
 
-    return required_extension_names;
+    return extensions;
 }

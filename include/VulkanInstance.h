@@ -22,7 +22,7 @@ public:
     VulkanInstance(
         const char* application_name,
         std::uint32_t application_version,
-        const CExtensionNameVector&& window_required_extension_names,
+        const CExtensionNameVector&& window_required_extensions,
         const VkDebugUtilsMessengerCreateInfoEXT* debug_messenger_create_info
     );
 
@@ -32,7 +32,7 @@ public:
 
 private:
     LayerNameSet get_available_layer_names() const;
-    ExtensionMap get_available_extensions(const LayerNameSet& available_layer_names) const;
+    ExtensionMap get_available_extensions(const LayerNameSet& available_layers) const;
 
     void get_available_extensions_from_layer(
         ExtensionMap& available_extensions,
