@@ -11,9 +11,7 @@
 
 #include "logging.h"
 
-#include "aliases/CExtensionName.h"
 #include "aliases/CExtensionNameVector.h"
-#include "aliases/CLayerName.h"
 #include "aliases/CLayerNameVector.h"
 #include "aliases/ExtensionMap.h"
 #include "aliases/ExtensionNameViewSet.h"
@@ -74,7 +72,6 @@ VulkanInstance::VulkanInstance(
 #endif
 
     enable_optional_layers(enabled_layer_name_set, available_layer_names, optional_layer_names);
-
     enable_extensions(
         enabled_layer_name_set,
         enabled_extension_name_set,
@@ -85,15 +82,41 @@ VulkanInstance::VulkanInstance(
         }
     );
 
+    CLayerNameVector enabled_layer_name_vector;
+    enabled_layer_name_vector.reserve(enabled_layer_name_set.size());
+    for (auto enabled_layer_name : enabled_layer_name_set)
+    {
+        enabled_layer_name_vector.emplace_back(enabled_layer_name.data());
+    }
+
+    CExtensionNameVector enabled_extension_name_vector;
+    enabled_extension_name_vector.reserve(enabled_extension_name_set.size());
+    for (auto enabled_extension_name : enabled_extension_name_set)
+    {
+        enabled_extension_name_vector.emplace_back(enabled_extension_name.data());
+    };
+
+    const bool enabled_portability_enumeration_extension
+        = enabled_extension_name_set.find(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME)
+            != enabled_extension_name_set.end();
+
+    const bool enabled_debug_utils_extension
+        = enabled_extension_name_set.find(VK_EXT_DEBUG_UTILS_EXTENSION_NAME)
+            != enabled_extension_name_set.end();
+
+    const bool enabled_validation_features_extension
+        = enabled_extension_name_set.find(VK_EXT_VALIDATION_FEATURES_EXTENSION_NAME)
+            != enabled_extension_name_set.end();
+
     VkInstanceCreateInfo create_info;
     create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     // create_info.pNext;
     // create_info.flags;
     create_info.pApplicationInfo = &application_info;
-    // create_info.enabledLayerCount;
-    // create_info.ppEnabledLayerNames;
-    // create_info.enabledExtensionCount;
-    // create_info.ppEnabledExtensionNames;
+    create_info.enabledLayerCount = enabled_layer_name_vector.size();
+    create_info.ppEnabledLayerNames = enabled_layer_name_vector.data();
+    create_info.enabledExtensionCount = enabled_extension_name_vector.size();
+    create_info.ppEnabledExtensionNames = enabled_extension_name_vector.data();
 }
 
 LayerNameSet VulkanInstance::get_available_layer_names() const
@@ -118,7 +141,7 @@ ExtensionMap VulkanInstance::get_available_extensions(const LayerNameSet& availa
     ExtensionMap available_extensions;
     get_available_extensions_from_layer(available_extensions);
 
-    for (LayerNameView available_layer_name : available_layer_names)
+    for (auto available_layer_name : available_layer_names)
     {
         get_available_extensions_from_layer(available_extensions, available_layer_name);
     }
@@ -159,7 +182,7 @@ void VulkanInstance::enable_extensions(
     std::function<void(const char* required_extension_name)> on_extension_unavailable
 ) const
 {
-    for (CExtensionName required_extension_name : required_extension_names)
+    for (auto required_extension_name : required_extension_names)
     {
         const auto found_extension_iterator = available_extensions.find(required_extension_name);
         if (found_extension_iterator == available_extensions.cend())
@@ -183,7 +206,7 @@ void VulkanInstance::enable_optional_layers(
     const CLayerNameVector& optional_layer_names
 ) const
 {
-    for (CLayerName optional_layer_name : optional_layer_names)
+    for (auto optional_layer_name : optional_layer_names)
     {
         if (available_layer_names.find(optional_layer_name) == available_layer_names.end())
         {
