@@ -141,7 +141,7 @@ ExtensionMap VulkanInstance::get_available_extensions(const LayerNameSet& availa
     ExtensionMap available_extensions;
     get_available_extensions_from_layer(available_extensions);
 
-    for (auto available_layer_name : available_layer_names)
+    for (LayerNameView available_layer_name : available_layer_names)
     {
         get_available_extensions_from_layer(available_extensions, available_layer_name);
     }
